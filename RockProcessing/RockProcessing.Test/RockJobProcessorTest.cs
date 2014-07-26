@@ -54,6 +54,7 @@ namespace RockProcessing.Test {
 			Console.WriteLine("Test Complete");
 		}
 
+		//TODO - check this. probably passes due to range but not likely accurate due to secondary weight loss dependent upon variable loss of first loss
 		[Test]
 		public void RockJobPostProcessWeightCorrectAfterProcessingWhenBothProcessingTypesApplied() {
 			var rockJobProcessor = new RockJobProcessor();
@@ -111,6 +112,34 @@ namespace RockProcessing.Test {
 			rockJobProcessor.Process(rockJob);
 
 			Assert.AreEqual(expectedProcessTime, rockJob.ProcessTime, "Process time not as expected");
+			Console.WriteLine("Test Complete");
+		}
+
+		[Test]
+		public void RockJobProcessTimeOfCompletedJobIsCorrectWhenRockRequiringBothProcessingTypesSentForProcessing() {
+			//TODO - rationalise this its not pretty
+
+			var rockJobProcessor = new RockJobProcessor();
+			const double weight = 3;
+			const RockType rockType = RockType.Gneiss;
+		
+			double crushProcessMinWeightLoss = CrushProcessMinWeightLoss(weight);
+			double crushProcessMaxWeightLoss = CrushProcessMaxWeightLoss(weight);
+			double expectedCrushProcessTimeLow = ((weight - crushProcessMaxWeightLoss) * CrushingProcessingTimePerKilo);
+			double expectedCrushProcessTimeHigh = ((weight - crushProcessMinWeightLoss) * CrushingProcessingTimePerKilo);
+
+			double expectedProcessTimeLow = (expectedCrushProcessTimeLow) + ((weight - crushProcessMaxWeightLoss) * SmoothingProcessingTimePerKilo);
+			double expectedProcessTimeHigh = (expectedCrushProcessTimeHigh) + ((weight - crushProcessMinWeightLoss) * SmoothingProcessingTimePerKilo);
+			
+			var rockJob = new RockJob(rockType, weight, this);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, weight);
+			Console.WriteLine("Expected process time between {0}ms and {1}ms", expectedProcessTimeLow, expectedProcessTimeHigh);
+
+			rockJobProcessor.Process(rockJob);
+
+			Assert.GreaterOrEqual(rockJob.ProcessTime, expectedProcessTimeLow, "Process time not as expected");
+			Assert.LessOrEqual(rockJob.ProcessTime, expectedProcessTimeHigh, "Process time not as expected");
 			Console.WriteLine("Test Complete");
 		}
 
