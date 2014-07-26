@@ -9,7 +9,7 @@ using RockProcessing.Model;
 
 namespace RockProcessing.Test{
 	[TestFixture]
-    public class RockProcessingEndToEndTest : IRockJobMonitor{
+    public class RockProcessingEndToEndTest : TestBase, IRockJobMonitor{
 		[Test]
 		public void RockFactoryReceivesAndProcessesSingleRockItemIssuingNotificationOnCompletion(){
 			var rockFactory = new RockFactory();
@@ -44,6 +44,32 @@ namespace RockProcessing.Test{
 			Assert.IsNotNull(rockjob, "Failed to retrieve Job object from factory");
 			Assert.AreEqual(jobId, rockjob.JobId);
 			Console.WriteLine("Test complete");
+		}
+
+		[Test]
+		public void FinishedWeightOfCompletedJobIsCorrectWhenRockRequiringSmoothingSentForProcessing() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+			const double weight = 5.6;
+			double expectedMinWeight = weight - SmoothProcessMaxWeightLoss(weight);
+			double expectedMaxWeight = weight - SmoothProcessMinWeightLoss(weight);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", RockType.Granit, weight);
+			Console.WriteLine("Expected Minimum Weight after processing {0}", expectedMinWeight);
+			Console.WriteLine("Expected Maximum Weight after processing {0}", expectedMaxWeight);
+
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
+			var rockJob = rockFactory.GetProcessJob(jobId);
+
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
+			Console.WriteLine("Test Complete");
 		}
 
 		private void WaitForNotfication(int timeout = 1000)

@@ -45,6 +45,7 @@
     <Compile Include="RockProcessingEndToEndTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RockJobProcessorTest.cs" />
+    <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
