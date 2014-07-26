@@ -15,7 +15,7 @@ namespace RockProcessing.Model
 
 		public void Process(RockJob job)
 		{
-			job.Complete = true;
+
 			if(job.RockType.Equals(RockType.Granit))
 			{
 				_smoother.ProcessRock(job);
