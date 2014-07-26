@@ -2,7 +2,7 @@ using System;
 
 namespace RockProcessing.Model
 {
-	public interface IRockProcessMonitor
+	public interface IRockJobMonitor
 	{
 		void NotifiyJobcomplete(Guid jobId);
 	}

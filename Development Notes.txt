@@ -3,7 +3,7 @@ Auth: Jonathan Allen, 2014/07/26
 
 TODO:
 
-	Send single item for processing, ascertain process details and packaging 
+	Send single item for processing, ascertain process details 
 
 
 Consider:
@@ -13,6 +13,7 @@ Consider:
 	Rock weight limit on input
 	Processing order
 	Statistics
+	Determination of process
 
 
 Objects:
