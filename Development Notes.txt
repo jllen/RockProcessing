@@ -3,14 +3,16 @@ Auth: Jonathan Allen, 2014/07/26
 
 TODO:
 
-	...
+	Send single item for processing, ascertain process details and packaging 
 
 
 Consider:
 
-	...
+	Packaging separation
+	Multiple line processing
 
 
 Objects:
 
-	...
+	Object: ProductionLine
+	Resp:	Receive rock line items for dispatch to processing
