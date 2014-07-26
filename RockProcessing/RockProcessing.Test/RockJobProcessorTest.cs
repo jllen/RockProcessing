@@ -10,10 +10,10 @@ namespace RockProcessing.Test {
 	[TestFixture]
 	class RockJobProcessorTest : IRockJobMonitor
 	{
-		private const double MinSmoothingDegrade = 5;
-		private const double MaxSmoothingDegrade = 7;
-		private const double MinCrushingDegrade = 20;
-		private const double MaxCrushingDegrade = 30;
+		private const double MinSmoothingPercentDegrade = 5;
+		private const double MaxSmoothingPercentDegrade = 7;
+		private const double MinCrushingPercentDegrade = 20;
+		private const double MaxCrushingPercentDegrade = 30;
 
 		[Test]
 		public void RockJobMarkedCompleteAfterProcessing()
@@ -29,9 +29,9 @@ namespace RockProcessing.Test {
 		public void RockJobPostProcessWeightCorrectAfterProcessingWhenSmoothingProcessApplied() {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Granit, 3, this);
-	
-			double expectedMinWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MaxSmoothingDegrade), 3);
-			double expectedMaxWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MinSmoothingDegrade), 3);
+
+			double expectedMinWeight = rockJob.CurrentWeight - SmoothProcessMaxWeightLoss(rockJob.CurrentWeight);
+			double expectedMaxWeight = rockJob.CurrentWeight - SmoothProcessMinWeightLoss(rockJob.CurrentWeight);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
 
@@ -47,8 +47,8 @@ namespace RockProcessing.Test {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Pegmatite, 3, this);
 
-			double expectedMinWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MaxCrushingDegrade), 3);
-			double expectedMaxWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MinCrushingDegrade), 3);
+			double expectedMinWeight = rockJob.CurrentWeight - CrushProcessMaxWeightLoss(rockJob.CurrentWeight);
+			double expectedMaxWeight = rockJob.CurrentWeight - CrushProcessMinWeightLoss(rockJob.CurrentWeight);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
 
@@ -64,10 +64,10 @@ namespace RockProcessing.Test {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Gneiss, 7, this);
 
-			double smoothProcessMaxWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MaxSmoothingDegrade, 3);
-			double smoothProcessMinWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MinSmoothingDegrade, 3);
-			double crushProcessMaxWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MaxCrushingDegrade, 3);
-			double crushProcessMinWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MinCrushingDegrade, 3);
+			double smoothProcessMaxWeightLoss = SmoothProcessMaxWeightLoss(rockJob.CurrentWeight);
+			double smoothProcessMinWeightLoss = SmoothProcessMinWeightLoss(rockJob.CurrentWeight);
+			double crushProcessMaxWeightLoss = CrushProcessMaxWeightLoss(rockJob.CurrentWeight);
+			double crushProcessMinWeightLoss = CrushProcessMinWeightLoss(rockJob.CurrentWeight);
 			double expectedMinWeight = rockJob.OriginWeight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
 			double expectedMaxWeight = rockJob.OriginWeight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
@@ -81,10 +81,37 @@ namespace RockProcessing.Test {
 			Console.WriteLine("Test Complete");
 		}
 
+		#region Private members
 
-		public void NotifiyJobcomplete(Guid jobId)
+		private static double CrushProcessMinWeightLoss(double weight)
+		{
+			return Math.Round((weight / 100) * MinCrushingPercentDegrade, 3);
+		}
+
+		private static double CrushProcessMaxWeightLoss(double weight)
+		{
+			return Math.Round((weight / 100) * MaxCrushingPercentDegrade, 3);
+		}
+
+		private static double SmoothProcessMinWeightLoss(double weight)
+		{
+			return Math.Round((weight / 100) * MinSmoothingPercentDegrade, 3);
+		}
+
+		private static double SmoothProcessMaxWeightLoss(double weight)
+		{
+			return Math.Round((weight / 100) * MaxSmoothingPercentDegrade, 3);
+		}
+
+		#endregion
+
+		#region IRockJobMonitor members
+
+		void IRockJobMonitor.NotifiyJobcomplete(Guid jobId)
 		{
 			//TODO
 		}
+
+		#endregion
 	}
 }
