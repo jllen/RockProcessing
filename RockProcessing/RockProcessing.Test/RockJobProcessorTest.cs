@@ -59,6 +59,28 @@ namespace RockProcessing.Test {
 			Console.WriteLine("Test Complete");
 		}
 
+		[Test]
+		public void RockJobPostProcessWeightCorrectAfterProcessingWhenBothProcessingTypesApplied() {
+			var rockJobProcessor = new RockJobProcessor();
+			var rockJob = new RockJob(RockType.Gneiss, 7, this);
+
+			double smoothProcessMaxWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MaxSmoothingDegrade, 3);
+			double smoothProcessMinWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MinSmoothingDegrade, 3);
+			double crushProcessMaxWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MaxCrushingDegrade, 3);
+			double crushProcessMinWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MinCrushingDegrade, 3);
+			double expectedMinWeight = rockJob.PreProcessWeight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
+			double expectedMaxWeight = rockJob.PreProcessWeight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
+			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
+			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
+
+			rockJobProcessor.Process(rockJob);
+
+			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.PostProcessWeight);
+			Console.WriteLine("Test Complete");
+		}
+
 
 		public void NotifiyJobcomplete(Guid jobId)
 		{
