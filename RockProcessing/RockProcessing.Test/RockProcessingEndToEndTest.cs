@@ -72,6 +72,64 @@ namespace RockProcessing.Test{
 			Console.WriteLine("Test Complete");
 		}
 
+		[Test]
+		public void FinishedWeightOfCompletedJobIsCorrectWhenRockRequiringCrushingSentForProcessing() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+			const double weight = 2.8;
+			const RockType rockType = RockType.Pegmatite;
+			double expectedMinWeight = weight - CrushProcessMaxWeightLoss(weight);
+			double expectedMaxWeight = weight - CrushProcessMinWeightLoss(weight);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, weight);
+			Console.WriteLine("Expected Minimum Weight after processing {0}", expectedMinWeight);
+			Console.WriteLine("Expected Maximum Weight after processing {0}", expectedMaxWeight);
+
+			Guid jobId = rockFactory.ProcessRock(rockType, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
+			var rockJob = rockFactory.GetProcessJob(jobId);
+
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
+			Console.WriteLine("Test Complete");
+		}
+
+		[Test]
+		public void FinishedWeightOfCompletedJobIsCorrectWhenRockRequiringSmoothingAndCrushingSentForProcessing() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+			const double weight = 6.8;
+			const RockType rockType = RockType.Gneiss;
+			double smoothProcessMaxWeightLoss = SmoothProcessMaxWeightLoss(weight);
+			double smoothProcessMinWeightLoss = SmoothProcessMinWeightLoss(weight);
+			double crushProcessMaxWeightLoss = CrushProcessMaxWeightLoss(weight);
+			double crushProcessMinWeightLoss = CrushProcessMinWeightLoss(weight);
+			double expectedMinWeight = weight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
+			double expectedMaxWeight = weight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, weight);
+			Console.WriteLine("Expected Minimum Weight after processing {0}", expectedMinWeight);
+			Console.WriteLine("Expected Maximum Weight after processing {0}", expectedMaxWeight);
+
+			Guid jobId = rockFactory.ProcessRock(rockType, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
+			var rockJob = rockFactory.GetProcessJob(jobId);
+
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight, "Post process weight not within the expected bounds");
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
+			Console.WriteLine("Test Complete");
+		}
+
 		private void WaitForNotfication(int timeout = 1000)
 		{
 			if(!_jobCompleteWaitEvent.WaitOne(timeout))
