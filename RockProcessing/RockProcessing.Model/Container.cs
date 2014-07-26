@@ -2,7 +2,7 @@ using System;
 
 namespace RockProcessing.Model
 {
-	public class Container
+	public class Container<T>
 	{
 		private readonly Guid _containerId;
 		private double _currentCapacity;
@@ -22,10 +22,8 @@ namespace RockProcessing.Model
 			get { return _currentCapacity; }
 		}
 
-		//TODO query this notion - adding a job to a container sounds wrong
-		public void Add(RockJob job)
+		public void Add(T item)
 		{
-			//TODO
 		}
 	}
 }

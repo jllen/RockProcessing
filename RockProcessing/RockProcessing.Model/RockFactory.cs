@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace RockProcessing.Model {
-	public class RockFactory : IRockJobMonitor
+	public class RockFactory : IRockJobMonitor, IRockJobProvider
 	{
 		private readonly ProcessingLine _processingLine;
 		private Dictionary<Guid, RockJob> _jobCatalogue = new Dictionary<Guid, RockJob>();//TODO push this out elsewhere
@@ -14,7 +14,7 @@ namespace RockProcessing.Model {
 		public RockFactory() {
 			//TODO introduce multiple lines - probably create list of lines fed off _processJobs
 			_processingLine = new ProcessingLine(_processJobs, this, true);
-			_packageManager = new PackageManager();
+			_packageManager = new PackageManager(this);
 			_monitors.Add(_packageManager);
 		}
 
@@ -46,5 +46,14 @@ namespace RockProcessing.Model {
 		{
 			_monitors.Add(rockProcessMonitor);
 		}
+
+		#region IRockJobProvider members
+
+		RockJob IRockJobProvider.GetRockJobById(Guid jobId)
+		{
+			return (_jobCatalogue.ContainsKey(jobId)) ? _jobCatalogue[jobId] : null;
+		}
+
+		#endregion
 	}
 }

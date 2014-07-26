@@ -5,7 +5,7 @@ End To End:
 
 	Send single item for processing, receive notification of process completion 
 	Send single item for processing, ascertain process details 
-
+	Send single item for processing, ascertain container identity 
 
 Todo:
 
@@ -14,7 +14,7 @@ Todo:
 
 Consider:
 
-	Packaging separation
+	Packaging separation - ie Pegmatite 
 	Multiple line processing
 	Rock weight limit on input
 	Processing order
@@ -26,7 +26,10 @@ Consider:
 Objects:
 
 	Object: RockFactory
-	Resp:	Orchestrator of rock processing and reporting operations (?)
+	Resp:	Orchestrator of rock processing and reporting operations (? No)
+	Todo: 	Introduce some 'Reporter' thing to delegate this away from this class
+			Introduce some 'Package Manager' to delegate package queries off to
+			These could be hosted by the RF
 
 	Object: ProductionLine
 	Resp:	Sends rock line items for dispatch to processing
@@ -49,6 +52,7 @@ Objects:
 	Notes: 	In use - seems reasonable but not brilliant
 	Todo:	Refactor / remake processing mech
 
-	Object: RockPacker ?
-	Resp:	Orchestror of packing operations
+	Object: PackageManager
+	Resp:	Orchestror of packing operations, provider of job to container lookups 
+	Todo: 	Implement
 

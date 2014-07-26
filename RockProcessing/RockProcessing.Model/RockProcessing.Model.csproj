@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container.cs" />
+    <Compile Include="IRockJobProvider.cs" />
     <Compile Include="IRockJobMonitor.cs" />
     <Compile Include="PackageManager.cs" />
+    <Compile Include="Rock.cs" />
     <Compile Include="RockCrusher.cs" />
     <Compile Include="RockJobProcessor.cs" />
     <Compile Include="ProcessingLine.cs" />
