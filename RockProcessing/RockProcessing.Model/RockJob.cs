@@ -13,7 +13,7 @@ namespace RockProcessing.Model {
 		private bool _complete;
 		private double _currentWeight;
 
-		public RockJob(RockType rockType, int weight, IRockJobMonitor monitor)
+		public RockJob(RockType rockType, double weight, IRockJobMonitor monitor)
 		{
 			_rockType = rockType;
 			_originWeight = weight;

@@ -10,11 +10,6 @@ namespace RockProcessing.Test {
 	[TestFixture]
 	class RockJobProcessorTest : IRockJobMonitor
 	{
-		private const double MinSmoothingPercentDegrade = 5;
-		private const double MaxSmoothingPercentDegrade = 7;
-		private const double MinCrushingPercentDegrade = 20;
-		private const double MaxCrushingPercentDegrade = 30;
-
 		[Test]
 		public void RockJobMarkedCompleteAfterProcessing()
 		{
@@ -82,6 +77,11 @@ namespace RockProcessing.Test {
 		}
 
 		#region Private members
+	
+		private const double MinSmoothingPercentDegrade = 5;
+		private const double MaxSmoothingPercentDegrade = 7;
+		private const double MinCrushingPercentDegrade = 20;
+		private const double MaxCrushingPercentDegrade = 30;
 
 		private static double CrushProcessMinWeightLoss(double weight)
 		{

@@ -14,10 +14,15 @@ namespace RockProcessing.Test{
 		public void RockFactoryReceivesAndProcessesSingleRockItemIssuingNotificationOnCompletion(){
 			var rockFactory = new RockFactory();
 			rockFactory.RegisterMonitor(this);
-			
-			Guid jobId = rockFactory.ProcessRock(RockType.Granit, 3);
-			
-			WaitForJobCompletion();
+			const double weight = 3;
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", RockType.Granit, weight);
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
 			Console.WriteLine("Test complete");
 		}
 
@@ -25,17 +30,23 @@ namespace RockProcessing.Test{
 		public void ProcessInformationAvailableAfterNotificationCompletionReceived() {
 			var rockFactory = new RockFactory();
 			rockFactory.RegisterMonitor(this);
+			const double weight = 5.6;
 
-			Guid jobId = rockFactory.ProcessRock(RockType.Granit, 3);
+			Console.WriteLine("Sending {0} item of weight {1} for processing", RockType.Granit, weight);
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, weight);
 
-			WaitForJobCompletion();
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
 			Console.WriteLine("Notifications received.");
+			
 			var rockjob = rockFactory.GetProcessJob(jobId);
+			
 			Assert.IsNotNull(rockjob, "Failed to retrieve Job object from factory");
+			Assert.AreEqual(jobId, rockjob.JobId);
 			Console.WriteLine("Test complete");
 		}
 
-		private void WaitForJobCompletion(int timeout = 1000)
+		private void WaitForNotfication(int timeout = 1000)
 		{
 			if(!_jobCompleteWaitEvent.WaitOne(timeout))
 			{

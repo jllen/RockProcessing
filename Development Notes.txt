@@ -15,6 +15,7 @@ Consider:
 	Processing order
 	Statistics
 	Determination of process
+	Timing of processes
 
 
 Objects:
@@ -25,8 +26,8 @@ Objects:
 	Object: ProductionLine
 	Resp:	Sends rock line items for dispatch to processing
 
-	Object: ProcessJob
-	Resp:	Colator of item and infomration pertaining to a processing operation
+	Object: RockJob
+	Resp:	Colator of item and information pertaining to a processing operation
 
 	Object: RockJobProcessor 
 	Resp:	Orchestrator of rock processing based upon rock type
