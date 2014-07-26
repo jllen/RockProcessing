@@ -1,0 +1,16 @@
+Rock Processing - Development Notes
+Auth: Jonathan Allen, 2014/07/26
+
+TODO:
+
+	...
+
+
+Consider:
+
+	...
+
+
+Objects:
+
+	...
