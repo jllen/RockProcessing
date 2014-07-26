@@ -15,10 +15,24 @@ namespace RockProcessing.Test{
 			var rockFactory = new RockFactory();
 			rockFactory.RegisterMonitor(this);
 			
-			Guid jobId;
-			rockFactory.ProcessRock(RockType.Granit, 3, out jobId);
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, 3);
 			
 			WaitForJobCompletion();
+			Console.WriteLine("Test complete");
+		}
+
+		[Test]
+		public void ProcessInformationAvailableAfterNotificationCompletionReceived() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, 3);
+
+			WaitForJobCompletion();
+			Console.WriteLine("Notifications received.");
+			var rockjob = rockFactory.GetProcessJob(jobId);
+			Assert.IsNotNull(rockjob, "Failed to retrieve Job object from factory");
+			Console.WriteLine("Test complete");
 		}
 
 		private void WaitForJobCompletion(int timeout = 1000)
@@ -28,17 +42,25 @@ namespace RockProcessing.Test{
 				throw new Exception("Did not return to test");
 			}
 		}
-		
-		public void NotifiyJobcomplete(Guid jobId)
+
+		#region IRockJobMonitor members
+
+		void IRockJobMonitor.NotifiyJobcomplete(Guid jobId)
 		{
 			_jobCompleteWaitEvent.Set();
 		}
+
+		#endregion
+
+		#region NUnit stuff
 
 		[SetUp]
 		public void Init()
 		{
 			_jobCompleteWaitEvent.Reset();
 		}
+
+		#endregion
 
 		#region Private fields
 

@@ -14,10 +14,10 @@ namespace RockProcessing.Model {
 			_processingLine = new ProcessingLine(_processJobs, this, true);
 		}
 
-		public void ProcessRock(RockType rockType, int weight, out Guid jobId) {
+		public Guid ProcessRock(RockType rockType, int weight) {
 			var rockJob = new RockJob(rockType, weight, this);
-			jobId = rockJob.JobId;
 			_processJobs.Add(rockJob);
+			return rockJob.JobId;
 		}
 
 		public RockJob GetProcessJob(Guid jobId) {
