@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Container.cs" />
     <Compile Include="IRockJobMonitor.cs" />
+    <Compile Include="PackageManager.cs" />
     <Compile Include="RockCrusher.cs" />
     <Compile Include="RockJobProcessor.cs" />
     <Compile Include="ProcessingLine.cs" />

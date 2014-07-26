@@ -6,13 +6,16 @@ namespace RockProcessing.Model {
 	public class RockFactory : IRockJobMonitor
 	{
 		private readonly ProcessingLine _processingLine;
-		private Dictionary<Guid, RockJob> _jobCatalogue = new Dictionary<Guid, RockJob>();
+		private Dictionary<Guid, RockJob> _jobCatalogue = new Dictionary<Guid, RockJob>();//TODO push this out elsewhere
 		private BlockingCollection<RockJob> _processJobs = new BlockingCollection<RockJob>();
-		private List<IRockJobMonitor> _monitors = new List<IRockJobMonitor>();
+		private List<IRockJobMonitor> _monitors = new List<IRockJobMonitor>();//TODO push this out elsewhere
+		private PackageManager _packageManager;
 
 		public RockFactory() {
-			//todo introduce multiple lines - probably create list of lines fed off _processJobs
+			//TODO introduce multiple lines - probably create list of lines fed off _processJobs
 			_processingLine = new ProcessingLine(_processJobs, this, true);
+			_packageManager = new PackageManager();
+			_monitors.Add(_packageManager);
 		}
 
 		public Guid ProcessRock(RockType rockType, double weight) {
