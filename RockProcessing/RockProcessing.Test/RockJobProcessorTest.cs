@@ -10,6 +10,9 @@ namespace RockProcessing.Test {
 	[TestFixture]
 	class RockJobProcessorTest : IRockJobMonitor
 	{
+		private const double MinGranitDegrade = 5;
+		private const double MaxGranitDegrade = 7;
+
 		[Test]
 		public void RockJobMarkedCompleteAfterProcessing()
 		{
@@ -21,15 +24,22 @@ namespace RockProcessing.Test {
 		}
 
 		[Test]
-		public void RockJobPostProcessWeightCorrectAfterProcessing() {
-			var processor = new RockJobProcessor();
+		public void RockJobPostProcessWeightCorrectAfterProcessingWhenSmoothingProcessApplied() {
+			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Granit, 3, this);
-			processor.Process(rockJob);
-			double expectedMinWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * 7);
-			double expectedMaxWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * 5);
+	
+			double expectedMinWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MaxGranitDegrade);
+			double expectedMaxWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MinGranitDegrade);
+			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
+			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
+
+			rockJobProcessor.Process(rockJob);
 			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
 			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.PostProcessWeight);
+			Console.WriteLine("Test Complete");
 		}
+
 
 		public void NotifiyJobcomplete(Guid jobId)
 		{
