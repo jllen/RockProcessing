@@ -15,10 +15,13 @@ namespace RockProcessing.Model
 
 		public void Process(RockJob job)
 		{
-
 			if(job.RockType.Equals(RockType.Granit))
 			{
 				_smoother.ProcessRock(job);
+			}
+			else if(job.RockType.Equals(RockType.Pegmatite))
+			{
+				_crusher.ProcessRock(job);
 			}
 		}
 	}
@@ -29,6 +32,7 @@ namespace RockProcessing.Model
 		{
 			double variableChange = RandomDouble(5.0, 7.0);
 			rockJob.PostProcessWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * variableChange), 2);
+			rockJob.Complete = true;
 		}
 
 		public double RandomDouble(double minimum, double maximum) {
@@ -39,9 +43,15 @@ namespace RockProcessing.Model
 
 	public class RockCrusher : IRockProcessor
 	{
-		public void ProcessRock(RockJob rockJob)
-		{
-			throw new System.NotImplementedException();
+		public void ProcessRock(RockJob rockJob) {
+			double variableChange = RandomDouble(20.0, 30.0);
+			rockJob.PostProcessWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * variableChange), 2);
+			rockJob.Complete = true;
+		}
+
+		public double RandomDouble(double minimum, double maximum) {
+			Random random = new Random();
+			return random.NextDouble() * (maximum - minimum) + minimum;
 		}
 	}
 }
