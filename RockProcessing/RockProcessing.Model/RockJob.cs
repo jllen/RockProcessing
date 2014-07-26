@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 namespace RockProcessing.Model {
 	public class RockJob {
 		private readonly RockType _rockType;
-		private readonly int _weight;
+		private readonly double _originWeight;
 		private readonly IRockJobMonitor _monitor;
 		private readonly Guid _jobId;
 		private bool _complete;
+		private double _currentWeight;
 
 		public RockJob(RockType rockType, int weight, IRockJobMonitor monitor)
 		{
 			_rockType = rockType;
-			_weight = weight;
+			_originWeight = weight;
+			_currentWeight = _originWeight;
 			_monitor = monitor;
 			_jobId = Guid.NewGuid();
 		}
@@ -25,9 +27,9 @@ namespace RockProcessing.Model {
 			get { return _rockType; }
 		}
 
-		public double PreProcessWeight
+		public double OriginWeight
 		{
-			get { return _weight; }
+			get { return _originWeight; }
 		}
 
 		public Guid JobId
@@ -48,6 +50,10 @@ namespace RockProcessing.Model {
 			}
 		}
 
-		public double PostProcessWeight { get; set; }
+		public double CurrentWeight
+		{
+			get { return _currentWeight; } 
+			set { _currentWeight = value; }
+		}
 	}
 }

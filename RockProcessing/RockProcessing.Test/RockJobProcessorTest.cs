@@ -30,15 +30,15 @@ namespace RockProcessing.Test {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Granit, 3, this);
 	
-			double expectedMinWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MaxSmoothingDegrade), 3);
-			double expectedMaxWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MinSmoothingDegrade), 3);
+			double expectedMinWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MaxSmoothingDegrade), 3);
+			double expectedMaxWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MinSmoothingDegrade), 3);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
 
 			rockJobProcessor.Process(rockJob);
-			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
-			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
-			Console.WriteLine("Actual Post Process Weight {0}", rockJob.PostProcessWeight);
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
 			Console.WriteLine("Test Complete");
 		}
 
@@ -47,15 +47,15 @@ namespace RockProcessing.Test {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Pegmatite, 3, this);
 
-			double expectedMinWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MaxCrushingDegrade), 3);
-			double expectedMaxWeight = Math.Round(rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * MinCrushingDegrade), 3);
+			double expectedMinWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MaxCrushingDegrade), 3);
+			double expectedMaxWeight = Math.Round(rockJob.OriginWeight - ((rockJob.OriginWeight / 100) * MinCrushingDegrade), 3);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
 
 			rockJobProcessor.Process(rockJob);
-			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
-			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
-			Console.WriteLine("Actual Post Process Weight {0}", rockJob.PostProcessWeight);
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
 			Console.WriteLine("Test Complete");
 		}
 
@@ -64,20 +64,20 @@ namespace RockProcessing.Test {
 			var rockJobProcessor = new RockJobProcessor();
 			var rockJob = new RockJob(RockType.Gneiss, 7, this);
 
-			double smoothProcessMaxWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MaxSmoothingDegrade, 3);
-			double smoothProcessMinWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MinSmoothingDegrade, 3);
-			double crushProcessMaxWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MaxCrushingDegrade, 3);
-			double crushProcessMinWeightLoss = Math.Round((rockJob.PreProcessWeight / 100) * MinCrushingDegrade, 3);
-			double expectedMinWeight = rockJob.PreProcessWeight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
-			double expectedMaxWeight = rockJob.PreProcessWeight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
+			double smoothProcessMaxWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MaxSmoothingDegrade, 3);
+			double smoothProcessMinWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MinSmoothingDegrade, 3);
+			double crushProcessMaxWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MaxCrushingDegrade, 3);
+			double crushProcessMinWeightLoss = Math.Round((rockJob.OriginWeight / 100) * MinCrushingDegrade, 3);
+			double expectedMinWeight = rockJob.OriginWeight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
+			double expectedMaxWeight = rockJob.OriginWeight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
 			Console.WriteLine("Expected Minimum Weight {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight {0}", expectedMaxWeight);
 
 			rockJobProcessor.Process(rockJob);
 
-			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
-			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
-			Console.WriteLine("Actual Post Process Weight {0}", rockJob.PostProcessWeight);
+			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight);
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
 			Console.WriteLine("Test Complete");
 		}
 
