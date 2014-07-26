@@ -3,6 +3,7 @@ Auth: Jonathan Allen, 2014/07/26
 
 TODO:
 
+	Send single item for processing, receive notification of process completion 
 	Send single item for processing, ascertain process details 
 
 
