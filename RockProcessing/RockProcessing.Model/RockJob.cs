@@ -12,6 +12,7 @@ namespace RockProcessing.Model {
 		private readonly Guid _jobId;
 		private bool _complete;
 		private double _currentWeight;
+		private double _processTime;
 
 		public RockJob(RockType rockType, double weight, IRockJobMonitor monitor)
 		{
@@ -54,6 +55,12 @@ namespace RockProcessing.Model {
 		{
 			get { return _currentWeight; } 
 			set { _currentWeight = value; }
+		}
+
+		public double ProcessTime
+		{
+			get { return _processTime; }
+			set { _processTime = value; }
 		}
 	}
 }

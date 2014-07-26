@@ -130,6 +130,29 @@ namespace RockProcessing.Test{
 			Console.WriteLine("Test Complete");
 		}
 
+		[Test]
+		public void TotalProcessTimeOfCompletedJobIsCorrectWhenRockRequiringSmoothingSentForProcessing() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+			const double weight = 5.6;
+			const int expectedProcessTime = (int) (weight * SmoothingProcessingTimePerKilo);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", RockType.Granit, weight);
+			Console.WriteLine("Expected process time {0}ms", expectedProcessTime);
+
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
+			var rockJob = rockFactory.GetProcessJob(jobId);
+
+			Assert.AreEqual(expectedProcessTime, rockJob.ProcessTime, "Process time not as expected");
+			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
+			Console.WriteLine("Test Complete");
+		}
+
 		private void WaitForNotfication(int timeout = 1000)
 		{
 			if(!_jobCompleteWaitEvent.WaitOne(timeout))

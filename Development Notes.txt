@@ -1,11 +1,16 @@
 Rock Processing - Development Notes
 Auth: Jonathan Allen, 2014/07/26
 
-TODO:
+End To End:
 
 	Send single item for processing, receive notification of process completion 
 	Send single item for processing, ascertain process details 
 
+
+Todo:
+
+	Sort out the external return of the Job information. Should be sealed. 
+	Put all processing data (time / weight effect per process) as available resource from RockFactory
 
 Consider:
 
