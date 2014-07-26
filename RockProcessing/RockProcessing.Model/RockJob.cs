@@ -25,7 +25,7 @@ namespace RockProcessing.Model {
 			get { return _rockType; }
 		}
 
-		public int Weight
+		public double PreProcessWeight
 		{
 			get { return _weight; }
 		}
@@ -47,5 +47,7 @@ namespace RockProcessing.Model {
 				}
 			}
 		}
+
+		public double PostProcessWeight { get; set; }
 	}
 }

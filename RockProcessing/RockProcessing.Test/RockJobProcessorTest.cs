@@ -20,6 +20,17 @@ namespace RockProcessing.Test {
 			Assert.IsTrue(rockJob.Complete);
 		}
 
+		[Test]
+		public void RockJobPostProcessWeightCorrectAfterProcessing() {
+			var processor = new RockJobProcessor();
+			var rockJob = new RockJob(RockType.Granit, 3, this);
+			processor.Process(rockJob);
+			double expectedMinWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * 7);
+			double expectedMaxWeight = rockJob.PreProcessWeight - ((rockJob.PreProcessWeight / 100) * 5);
+			Assert.GreaterOrEqual(rockJob.PostProcessWeight, expectedMinWeight, "Post process weight not within the expected bounds");
+			Assert.LessOrEqual(rockJob.PostProcessWeight, expectedMaxWeight);
+		}
+
 		public void NotifiyJobcomplete(Guid jobId)
 		{
 			//TODO
