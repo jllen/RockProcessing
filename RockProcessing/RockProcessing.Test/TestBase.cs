@@ -14,6 +14,7 @@ namespace RockProcessing.Test {
 		protected const double MinCrushingPercentDegrade = 20;
 		protected const double MaxCrushingPercentDegrade = 30;
 		protected const double SmoothingProcessingTimePerKilo = 500;
+		protected const double CrushingProcessingTimePerKilo = 50;
 
 
 		protected double CrushProcessMinWeightLoss(double weight) {

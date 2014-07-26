@@ -40,12 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IRockJobMonitor.cs" />
+    <Compile Include="RockCrusher.cs" />
     <Compile Include="RockJobProcessor.cs" />
     <Compile Include="ProcessingLine.cs" />
     <Compile Include="RockJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RockFactory.cs" />
     <Compile Include="IRockProcessor.cs" />
+    <Compile Include="RockProcessor.cs" />
+    <Compile Include="RockSmoother.cs" />
     <Compile Include="RockType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -57,7 +57,8 @@ namespace RockProcessing.Test {
 		[Test]
 		public void RockJobPostProcessWeightCorrectAfterProcessingWhenBothProcessingTypesApplied() {
 			var rockJobProcessor = new RockJobProcessor();
-			var rockJob = new RockJob(RockType.Gneiss, 6.8, this);
+			const RockType rockType = RockType.Gneiss;
+			var rockJob = new RockJob(rockType, 6.8, this);
 
 			double smoothProcessMaxWeightLoss = SmoothProcessMaxWeightLoss(rockJob.CurrentWeight);
 			double smoothProcessMinWeightLoss = SmoothProcessMinWeightLoss(rockJob.CurrentWeight);
@@ -65,6 +66,7 @@ namespace RockProcessing.Test {
 			double crushProcessMinWeightLoss = CrushProcessMinWeightLoss(rockJob.CurrentWeight);
 			double expectedMinWeight = rockJob.OriginWeight - (smoothProcessMaxWeightLoss + crushProcessMaxWeightLoss);
 			double expectedMaxWeight = rockJob.OriginWeight - (smoothProcessMinWeightLoss + crushProcessMinWeightLoss);
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, rockJob.OriginWeight);
 			Console.WriteLine("Expected Minimum Weight after processing {0}", expectedMinWeight);
 			Console.WriteLine("Expected Maximum Weight after processing {0}", expectedMaxWeight);
 
@@ -73,6 +75,42 @@ namespace RockProcessing.Test {
 			Assert.GreaterOrEqual(rockJob.CurrentWeight, expectedMinWeight, "Post process weight not within the expected bounds");
 			Assert.LessOrEqual(rockJob.CurrentWeight, expectedMaxWeight, "Post process weight not within the expected bounds");
 			Console.WriteLine("Actual Post Process Weight {0}", rockJob.CurrentWeight);
+			Console.WriteLine("Test Complete");
+		}
+
+		// TODO - Bit of duplication going on here between this and the E2E tests. Revisit, probably change the E2E tests to be higher level concerns
+
+		[Test]
+		public void RockJobProcessTimeOfCompletedJobIsCorrectWhenRockRequiringSmoothingSentForProcessing() {
+			var rockJobProcessor = new RockJobProcessor();
+			const double weight = 5.6;
+			const RockType rockType = RockType.Granit;
+			const int expectedProcessTime = (int) (weight * SmoothingProcessingTimePerKilo);
+			var rockJob = new RockJob(rockType, weight, this);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, weight);
+			Console.WriteLine("Expected process time {0}ms", expectedProcessTime);
+
+			rockJobProcessor.Process(rockJob);
+
+			Assert.AreEqual(expectedProcessTime, rockJob.ProcessTime, "Process time not as expected");
+			Console.WriteLine("Test Complete");
+		}
+
+		[Test]
+		public void RockJobProcessTimeOfCompletedJobIsCorrectWhenRockRequiringCrushingSentForProcessing() {
+			var rockJobProcessor = new RockJobProcessor();
+			const double weight = 3;
+			const RockType rockType = RockType.Pegmatite;
+			const int expectedProcessTime = (int) (weight * CrushingProcessingTimePerKilo);
+			var rockJob = new RockJob(rockType, weight, this);
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", rockType, weight);
+			Console.WriteLine("Expected process time {0}ms", expectedProcessTime);
+
+			rockJobProcessor.Process(rockJob);
+
+			Assert.AreEqual(expectedProcessTime, rockJob.ProcessTime, "Process time not as expected");
 			Console.WriteLine("Test Complete");
 		}
 
