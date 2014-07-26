@@ -19,7 +19,7 @@ Consider:
 Objects:
 
 	Object: RockFactory
-	Resp:	Orchestrator of rock processing and reporting operations
+	Resp:	Orchestrator of rock processing and reporting operations (?)
 
 	Object: ProductionLine
 	Resp:	Sends rock line items for dispatch to processing
@@ -27,14 +27,21 @@ Objects:
 	Object: ProcessJob
 	Resp:	Colator of item and infomration pertaining to a processing operation
 
-	Object: RockProcessor ?
+	Object: RockJobProcessor 
 	Resp:	Orchestrator of rock processing based upon rock type
+	Notes: 	In use - seems reasonable
+	Todo:	Factorise the actual processing
 
-	Object: RockCrusher ?
+	Object: RockCrusher 
 	Resp:	Performs crush process on a given rock
+	Notes: 	In use - seems reasonable but not brilliant
+	Todo:	Refactor / remake processing mech
 
-	Object 	RockSmoother ?
+	Object:	RockSmoother  
 	Resp:	Performs smooth process on a given rock
+	Notes: 	In use - seems reasonable but not brilliant
+	Todo:	Refactor / remake processing mech
 
 	Object: RockPacker ?
 	Resp:	Orchestror of packing operations
+
