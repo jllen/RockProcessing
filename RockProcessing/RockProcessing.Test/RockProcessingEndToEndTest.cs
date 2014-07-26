@@ -46,6 +46,25 @@ namespace RockProcessing.Test{
 			Console.WriteLine("Test complete");
 		}
 
+		[Test]
+		public void ContianerIdAvailableAfterCompletionNotificationReceived() {
+			var rockFactory = new RockFactory();
+			rockFactory.RegisterMonitor(this);
+			const double weight = 5.6;
+
+			Console.WriteLine("Sending {0} item of weight {1} for processing", RockType.Granit, weight);
+			Guid jobId = rockFactory.ProcessRock(RockType.Granit, weight);
+
+			Console.WriteLine("Waiting for notifications.");
+			WaitForNotfication();
+			Console.WriteLine("Notifications received.");
+
+			var containerId = rockFactory.PackageManager.GetContainerIdForJob(jobId);
+
+			Assert.IsTrue(containerId != Guid.Empty, "Failed to retrieve contianer Id from Package Manager");
+			Console.WriteLine("Test complete");
+		}
+
 		private void WaitForNotfication(int timeout = 1000)
 		{
 			if(!_jobCompleteWaitEvent.WaitOne(timeout))

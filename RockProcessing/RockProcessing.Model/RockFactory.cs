@@ -18,6 +18,11 @@ namespace RockProcessing.Model {
 			_monitors.Add(_packageManager);
 		}
 
+		public PackageManager PackageManager
+		{
+			get { return _packageManager; }
+		}
+
 		public Guid ProcessRock(RockType rockType, double weight) {
 			var rockJob = new RockJob(rockType, weight, this);
 			_jobCatalogue.Add(rockJob.JobId, rockJob);
